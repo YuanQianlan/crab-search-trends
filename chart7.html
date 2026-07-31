@@ -13,16 +13,16 @@
       margin: 0;
       overflow-x: hidden;
       overflow-y: auto;
-      background: #fff4dc;
+      background: #f3f6f7;
       color: #28343c;
       font-family: "Times New Roman", "SimSun", "宋体", serif;
     }
     .shell {
       position: relative;
       width: 100vw;
-      height: max(900px, 100vh);
+      height: max(1040px, 100vh);
       min-width: 0;
-      min-height: 900px;
+      min-height: 1040px;
     }
     .page-title {
       position: absolute;
@@ -37,7 +37,7 @@
     }
     .charts {
       position: absolute;
-      top: 140px;
+      top: 220px;
       right: 18px;
       bottom: 28px;
       left: 18px;
@@ -78,14 +78,11 @@
     .market-share-panel {
       position: absolute;
       z-index: 6;
-      top: 70px;
+      top: 66px;
       left: 50%;
-      display: flex;
-      width: 520px;
-      padding: 10px 16px;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
+      display: block;
+      width: 220px;
+      padding: 11px 16px 12px;
       border: 1px solid #cbd4d8;
       border-radius: 9px;
       background: rgba(255,255,255,.94);
@@ -93,24 +90,27 @@
       transform: translateX(-50%);
     }
     .market-share-title {
-      padding-right: 20px;
-      border-right: 1px solid #e0e5e7;
+      margin-bottom: 5px;
+      padding-bottom: 7px;
+      border-bottom: 1px solid #e0e5e7;
       color: #344149;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
+      text-align: center;
       white-space: nowrap;
     }
     .market-share-row {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 0;
-      font-size: 13px;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 4px 3px;
+      font-size: 15px;
       white-space: nowrap;
     }
     .market-share-name { display: inline-flex; align-items: center; gap: 6px; }
     .market-share-dot { width: 7px; height: 7px; border-radius: 50%; }
-    .market-share-value { font: 700 16px "Times New Roman", serif; }
+    .market-share-value { font: 700 18px "Times New Roman", serif; }
     .linked-popup-panel {
       position: absolute;
       z-index: 6;
@@ -429,4 +429,3 @@
   </script>
 </body>
 </html>
-
