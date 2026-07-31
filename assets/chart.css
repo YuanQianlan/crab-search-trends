@@ -139,6 +139,36 @@ body {
   font-weight: 700;
 }
 
+.line-tooltip {
+  font-family: "Times New Roman", "SimSun", "宋体", serif;
+  color: #25313a;
+  white-space: nowrap;
+}
+
+.line-tooltip__year {
+  margin-bottom: 4px;
+  font-size: 13px;
+  color: #68737b;
+}
+
+.line-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.line-tooltip__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.line-tooltip__value {
+  font-family: "Times New Roman", serif;
+  font-weight: 700;
+}
+
 @media (max-width: 900px) {
   .side-legend--left {
     left: 1%;
