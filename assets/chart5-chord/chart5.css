@@ -1,0 +1,137 @@
+:root {
+  --ink: #18243a;
+  --production: #2d6f8b;
+  --sales: #d68a4a;
+  --both: #438477;
+  --background: #fff3c9;
+}
+
+* { box-sizing: border-box; }
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  min-width: 320px;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  color: var(--ink);
+  background: var(--background);
+  font-family: "Times New Roman", "SimSun", "宋体", serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.chart-page {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  width: 100%;
+  height: 100%;
+  min-height: 620px;
+  padding: 24px 34px 16px;
+}
+
+h1 {
+  margin: 0;
+  text-align: center;
+  font-family: "Times New Roman", "SimSun", "宋体", serif;
+  font-size: clamp(30px, 3vw, 48px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.legend {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 0 5px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.legend span {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.legend i {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+}
+
+.legend .production { background: var(--production); }
+.legend .sales { background: var(--sales); }
+.legend .both { background: var(--both); }
+
+.chart-stage {
+  position: relative;
+  min-height: 0;
+}
+
+#chordChart {
+  position: absolute;
+  inset: 0 90px 20px;
+}
+
+.side-label {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: "Times New Roman", "SimSun", "宋体", serif;
+  font-size: clamp(25px, 2vw, 34px);
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.production-label {
+  left: 22px;
+  color: var(--production);
+}
+
+.sales-label {
+  right: 22px;
+  color: var(--sales);
+}
+
+.bottom-label {
+  position: absolute;
+  z-index: 2;
+  bottom: 2px;
+  left: 50%;
+  color: var(--both);
+  font-family: "Times New Roman", "SimSun", "宋体", serif;
+  font-size: clamp(20px, 1.7vw, 27px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 720px) {
+  .chart-page {
+    min-height: 560px;
+    padding: 18px 8px 10px;
+  }
+
+  .legend {
+    gap: 12px;
+    font-size: 13px;
+  }
+
+  #chordChart {
+    right: 46px;
+    left: 46px;
+  }
+
+  .production-label { left: 4px; }
+  .sales-label { right: 4px; }
+}
