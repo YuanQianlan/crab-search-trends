@@ -47,7 +47,7 @@ h1 {
   position: absolute;
   z-index: 3;
   right: max(20px, calc(50% - 500px));
-  bottom: 8px;
+  bottom: 30px;
   display: flex;
   flex-direction: column;
   gap: 10px;
