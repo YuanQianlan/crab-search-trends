@@ -1,0 +1,27 @@
+:root { font-family: SimSun, "宋体", serif; color-scheme: light; }
+* { box-sizing: border-box; }
+html, body { width: 100%; min-width: 960px; height: 100%; margin: 0; }
+body { overflow: hidden; background: #fff4c9; color: #542b10; }
+.dashboard { display: grid; grid-template-columns: 66% 34%; width: 100vw; height: 100vh; padding: 22px 42px; }
+.chart-zone { position: relative; min-width: 0; min-height: 0; }
+#chart { position: absolute; inset: 0; }
+h1 { position: absolute; left: 46%; top: 0; z-index: 1; width: max-content; margin: 0; transform: translateX(-50%); color: #71310d; font: 900 38px/1.28 SimSun, "宋体", serif; white-space: nowrap; text-align: center; pointer-events: none; }
+.ranking { align-self: center; padding: 0; transform: translateX(-18px); }
+h2 { margin: 0 0 22px; color: #71310d; font: 900 27px/1 SimSun, "宋体", serif; }
+ol { display: grid; gap: 13px; margin: 0; padding: 0; list-style: none; }
+li { display: grid; grid-template-columns: 36px auto; align-items: center; column-gap: 10px; min-height: 50px; }
+.landmark { width: 34px; height: 50px; overflow: visible; stroke: #8a3b12; stroke-width: 2.7; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.image-icon { display: block; object-fit: contain; mix-blend-mode: multiply; }
+.pearl circle { fill: #df6a08; }
+.pagoda path:not(:last-child), .pavilion path:nth-child(3) { fill: #e97e19; }
+.mountain circle { fill: #f5ad5b; }
+p { display: flex; align-items: baseline; gap: 12px; margin: 0 0 6px; font: 900 23px/1 SimSun, "宋体", serif; }
+p b { color: #6a250b; }
+p span { color: #4b260d; }
+small { color: #df6a08; font: 900 21px/1 SimSun, "宋体", serif; }
+small em { color: #795333; font: 15px/1 SimSun, "宋体", serif; font-style: normal; }
+li:nth-child(1) b { color: #9c3608; }
+li:nth-child(2) b { color: #14606b; }
+li:nth-child(3) b { color: #285780; }
+li:nth-child(4) b { color: #3f7136; }
+li:nth-child(5) b { color: #7a427e; }
