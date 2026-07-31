@@ -22,8 +22,9 @@ body {
 }
 
 .page-shell {
+  position: relative;
   width: 100%;
-  min-height: 900px;
+  min-height: 1160px;
 }
 
 #main {
@@ -32,57 +33,126 @@ body {
   min-height: 900px;
 }
 
-.year-tooltip {
-  width: min(720px, calc(100vw - 40px));
+.side-legend {
+  position: absolute;
+  z-index: 2;
+  top: 72px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  pointer-events: none;
+}
+
+.side-legend--left {
+  left: 2.5%;
+}
+
+.side-legend--right {
+  right: 2.5%;
+}
+
+.side-legend__item {
+  display: flex;
+  align-items: center;
+  min-height: 15px;
+  color: #3e474e;
+  font-family: "Times New Roman", "SimSun", "宋体", serif;
+  font-size: 12px;
+  line-height: 15px;
+  white-space: nowrap;
+}
+
+.side-legend__marker {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+  margin-right: 6px;
+}
+
+.side-legend__marker::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border: 2px solid #fffaf4;
+  border-radius: 50%;
+  background: inherit;
+  content: "";
+  transform: translate(-50%, -50%);
+}
+
+.ranking-panel {
+  width: calc(100% - 80px);
+  margin: 0 auto 24px;
+  padding: 12px 18px 15px;
+  border: 1px solid #cbd3d8;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.82);
   font-family: "Times New Roman", "SimSun", "宋体", serif;
   color: #25313a;
 }
 
-.year-tooltip__title {
-  margin-bottom: 8px;
-  padding-bottom: 6px;
+.ranking-panel__title {
+  margin-bottom: 7px;
+  padding-bottom: 7px;
   border-bottom: 1px solid #d9dfe3;
   font-size: 15px;
   font-weight: 700;
   text-align: center;
 }
 
-.year-tooltip__grid {
+.ranking-panel__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(180px, 1fr));
-  gap: 3px 14px;
+  grid-template-columns: repeat(4, minmax(210px, 1fr));
+  gap: 4px 12px;
 }
 
-.year-tooltip__item {
-  display: grid;
-  grid-template-columns: 24px 10px minmax(72px, 1fr) auto;
+.ranking-panel__item {
+  display: flex;
   align-items: center;
-  min-height: 22px;
+  min-height: 20px;
   white-space: nowrap;
   font-size: 13px;
 }
 
-.year-tooltip__rank {
+.ranking-panel__rank {
+  width: 23px;
+  flex: 0 0 23px;
   color: #7a858d;
   text-align: right;
 }
 
-.year-tooltip__dot {
+.ranking-panel__dot {
   width: 8px;
   height: 8px;
+  margin: 0 5px;
+  flex: 0 0 8px;
   border-radius: 50%;
 }
 
-.year-tooltip__value {
-  padding-left: 8px;
+.ranking-panel__value {
+  margin-left: 7px;
   font-family: "Times New Roman", serif;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
-  text-align: right;
 }
 
 @media (max-width: 900px) {
-  .year-tooltip__grid {
+  .side-legend--left {
+    left: 1%;
+  }
+
+  .side-legend--right {
+    right: 1%;
+  }
+
+  .ranking-panel {
+    width: calc(100% - 30px);
+  }
+
+  .ranking-panel__grid {
     grid-template-columns: repeat(2, minmax(180px, 1fr));
   }
 }

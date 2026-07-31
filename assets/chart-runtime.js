@@ -49,24 +49,23 @@
       .sort((a, b) => b.value - a.value);
   }
 
-  function renderYearTooltip(dataIndex) {
+  function updateRankingPanel(dataIndex) {
     const year = years[dataIndex];
     const items = sortedYearData(dataIndex)
       .map((item, rank) => (
-        '<div class="year-tooltip__item">' +
-          '<span class="year-tooltip__rank">' + (rank + 1) + ".</span>" +
-          '<span class="year-tooltip__dot" style="background:' + item.itemStyle.color + '"></span>' +
+        '<div class="ranking-panel__item">' +
+          '<span class="ranking-panel__rank">' + (rank + 1) + ".</span>" +
+          '<span class="ranking-panel__dot" style="background:' + item.itemStyle.color + '"></span>' +
           "<span>" + escapeHtml(item.name) + "</span>" +
-          '<span class="year-tooltip__value">' + formatNumber(item.value) + "</span>" +
+          '<span class="ranking-panel__value">' + formatNumber(item.value) + "</span>" +
         "</div>"
       ))
       .join("");
 
-    return (
-      '<div class="year-tooltip">' +
-        '<div class="year-tooltip__title">' + year + "年各省份搜索总量（降序）</div>" +
-        '<div class="year-tooltip__grid">' + items + "</div>" +
-      "</div>"
+    const panel = document.querySelector(".ranking-panel");
+    panel.innerHTML = (
+      '<div class="ranking-panel__title">' + year + "年各省份搜索总量（降序）</div>" +
+      '<div class="ranking-panel__grid">' + items + "</div>"
     );
   }
 
@@ -93,6 +92,28 @@
     }));
   }
 
+  function renderSideLegend(names, side, startIndex) {
+    const container = document.createElement("div");
+    container.className = "side-legend side-legend--" + side;
+
+    names.forEach((name, index) => {
+      const item = document.createElement("div");
+      item.className = "side-legend__item";
+
+      const marker = document.createElement("span");
+      marker.className = "side-legend__marker";
+      marker.style.background = colors[(startIndex + index) % colors.length];
+
+      const label = document.createElement("span");
+      label.textContent = name;
+
+      item.append(marker, label);
+      container.append(item);
+    });
+
+    chartElement.parentElement.append(container);
+  }
+
   const chart = echarts.init(chartElement, null, { renderer: "canvas" });
 
   // 后续页面可以在自己的 charts/chartN.js 中提供完整 option，
@@ -108,6 +129,15 @@
     });
     return;
   }
+
+  renderSideLegend(provinceNames.slice(0, 17), "left", 0);
+  renderSideLegend(provinceNames.slice(17), "right", 17);
+
+  const rankingPanel = document.createElement("section");
+  rankingPanel.className = "ranking-panel";
+  rankingPanel.setAttribute("aria-live", "polite");
+  chartElement.parentElement.append(rankingPanel);
+  updateRankingPanel(0);
 
   const option = {
     backgroundColor: "#fffaf4",
@@ -143,29 +173,12 @@
       }
     ],
     legend: {
-      type: "plain",
-      orient: "horizontal",
-      data: provinceNames,
-      top: "42%",
-      left: "3%",
-      right: "3%",
-      itemWidth: 20,
-      itemHeight: 10,
-      itemGap: 10,
-      selectedMode: true,
-      textStyle: {
-        fontFamily: fontFamily,
-        fontSize: 12,
-        lineHeight: 18,
-        color: "#3e474e"
-      }
+      show: false
     },
     tooltip: {
       trigger: "axis",
       triggerOn: "mousemove|click",
-      showContent: true,
-      confine: true,
-      enterable: true,
+      showContent: false,
       transitionDuration: 0,
       axisPointer: {
         type: "line",
@@ -175,36 +188,13 @@
           width: 1,
           type: "dashed"
         }
-      },
-      backgroundColor: "rgba(255,255,255,0.98)",
-      borderColor: "#b9c2c8",
-      borderWidth: 1,
-      padding: 12,
-      extraCssText: "box-shadow:0 5px 22px rgba(29,45,55,.18);border-radius:6px;",
-      formatter: function (params) {
-        const linePoint = params.find((item) => item.seriesType === "line");
-        if (!linePoint) return "";
-        return renderYearTooltip(linePoint.dataIndex);
-      },
-      position: function (point, params, dom, rect, size) {
-        const margin = 12;
-        const preferredX = point[0] + 18;
-        const x = Math.min(
-          Math.max(margin, preferredX),
-          Math.max(margin, size.viewSize[0] - size.contentSize[0] - margin)
-        );
-        const y = Math.min(
-          Math.max(margin, point[1] - size.contentSize[1] / 2),
-          Math.max(margin, size.viewSize[1] - size.contentSize[1] - margin)
-        );
-        return [x, y];
       }
     },
     dataset: {
       source: source
     },
     grid: {
-      top: "58%",
+      top: "55%",
       left: 88,
       right: 42,
       bottom: 72
@@ -272,11 +262,12 @@
         id: "pie",
         name: "省份占比",
         type: "pie",
-        radius: ["11%", "25%"],
-        center: ["50%", "25%"],
+        radius: ["11%", "24%"],
+        center: ["50%", "24%"],
         startAngle: 90,
         clockwise: true,
         minAngle: 1,
+        avoidLabelOverlap: true,
         data: sortedYearData(0),
         emphasis: {
           focus: "self",
@@ -285,23 +276,24 @@
         label: {
           show: true,
           fontFamily: fontFamily,
-          fontSize: 11,
+          fontSize: 10,
           color: "#45515a",
           formatter: function (params) {
-            return params.percent >= 3
-              ? params.name + "\n" + formatNumber(params.value)
-              : "";
+            return params.percent.toFixed(1) + "%";
           }
         },
         labelLine: {
-          length: 8,
-          length2: 7
+          show: true,
+          length: 7,
+          length2: 6
         },
         labelLayout: {
-          hideOverlap: true
+          hideOverlap: false,
+          moveOverlap: "shiftY"
         },
         tooltip: {
           trigger: "item",
+          showContent: true,
           formatter: function (params) {
             return (
               escapeHtml(params.name) + "：" +
@@ -328,6 +320,8 @@
     if (!Number.isInteger(dataIndex) || dataIndex < 0 || dataIndex >= years.length) {
       return;
     }
+
+    updateRankingPanel(dataIndex);
 
     chart.setOption({
       title: [
