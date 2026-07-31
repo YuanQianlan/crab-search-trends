@@ -76,7 +76,7 @@
       smooth: 0.35,
       showSymbol: true,
       symbol: "circle",
-      symbolSize: 10,
+      symbolSize: 12,
       triggerLineEvent: true,
       seriesLayoutBy: "row",
       lineStyle: {
@@ -357,6 +357,97 @@
     if (params.seriesType !== "line") return;
     syncYearViews(params.dataIndex);
   });
+
+  let activeHoverSeries = -1;
+  let activeHoverDataIndex = -1;
+
+  function clearLineHover() {
+    if (activeHoverSeries >= 0) {
+      chart.dispatchAction({
+        type: "downplay",
+        seriesIndex: activeHoverSeries,
+        dataIndex: activeHoverDataIndex
+      });
+    }
+    activeHoverSeries = -1;
+    activeHoverDataIndex = -1;
+    chart.dispatchAction({ type: "hideTip" });
+  }
+
+  // ECharts 的折线本身命中范围很窄。这里按鼠标位置寻找最近的年份节点和
+  // 最近的省份折线，使用户不必精确压中一个很小的数据点。
+  chart.getZr().on("mousemove", function (event) {
+    const pointer = [event.offsetX, event.offsetY];
+    if (!chart.containPixel({ gridIndex: 0 }, pointer)) {
+      if (activeHoverSeries >= 0) clearLineHover();
+      return;
+    }
+
+    let nearestDataIndex = -1;
+    let nearestXDistance = Infinity;
+    years.forEach(function (year, dataIndex) {
+      const x = chart.convertToPixel({ xAxisIndex: 0 }, year);
+      const distance = Math.abs(pointer[0] - x);
+      if (distance < nearestXDistance) {
+        nearestXDistance = distance;
+        nearestDataIndex = dataIndex;
+      }
+    });
+
+    if (nearestDataIndex < 0) return;
+
+    let nearestSeriesIndex = -1;
+    let nearestYDistance = Infinity;
+    provinceRows.forEach(function (row, seriesIndex) {
+      const value = Number(row[nearestDataIndex + 1]) || 0;
+      const point = chart.convertToPixel(
+        { xAxisIndex: 0, yAxisIndex: 0 },
+        [years[nearestDataIndex], value]
+      );
+      const distance = Math.abs(pointer[1] - point[1]);
+      if (distance < nearestYDistance) {
+        nearestYDistance = distance;
+        nearestSeriesIndex = seriesIndex;
+      }
+    });
+
+    // 28px 的纵向感应带让折线容易选中，同时仍能区分相邻折线。
+    if (nearestSeriesIndex < 0 || nearestYDistance > 28) {
+      if (activeHoverSeries >= 0) clearLineHover();
+      return;
+    }
+
+    if (
+      activeHoverSeries !== nearestSeriesIndex ||
+      activeHoverDataIndex !== nearestDataIndex
+    ) {
+      if (activeHoverSeries >= 0) {
+        chart.dispatchAction({
+          type: "downplay",
+          seriesIndex: activeHoverSeries,
+          dataIndex: activeHoverDataIndex
+        });
+      }
+
+      activeHoverSeries = nearestSeriesIndex;
+      activeHoverDataIndex = nearestDataIndex;
+      chart.dispatchAction({
+        type: "highlight",
+        seriesIndex: nearestSeriesIndex,
+        dataIndex: nearestDataIndex
+      });
+      syncYearViews(nearestDataIndex);
+    }
+
+    chart.dispatchAction({
+      type: "showTip",
+      seriesIndex: nearestSeriesIndex,
+      dataIndex: nearestDataIndex,
+      position: pointer
+    });
+  });
+
+  chart.getZr().on("globalout", clearLineHover);
 
   chart.on("updateAxisPointer", function (event) {
     const axisInfo = event.axesInfo && event.axesInfo[0];
