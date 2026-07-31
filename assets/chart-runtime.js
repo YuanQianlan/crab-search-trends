@@ -74,8 +74,10 @@
       name: row[0],
       type: "line",
       smooth: 0.35,
-      showSymbol: false,
+      showSymbol: true,
       symbol: "circle",
+      symbolSize: 10,
+      triggerLineEvent: true,
       seriesLayoutBy: "row",
       lineStyle: {
         width: 2,
@@ -83,11 +85,16 @@
         opacity: 0.9
       },
       itemStyle: {
-        color: colors[rowIndex % colors.length]
+        color: colors[rowIndex % colors.length],
+        opacity: 0.01
       },
       emphasis: {
         focus: "series",
-        lineStyle: { width: 4 }
+        lineStyle: { width: 4 },
+        itemStyle: { opacity: 1 }
+      },
+      blur: {
+        lineStyle: { opacity: 0.12 }
       }
     }));
   }
@@ -176,18 +183,34 @@
       show: false
     },
     tooltip: {
-      trigger: "axis",
+      trigger: "item",
       triggerOn: "mousemove|click",
-      showContent: false,
+      showContent: true,
+      confine: true,
       transitionDuration: 0,
-      axisPointer: {
-        type: "line",
-        snap: true,
-        lineStyle: {
-          color: "#64727d",
-          width: 1,
-          type: "dashed"
-        }
+      backgroundColor: "rgba(255,255,255,0.96)",
+      borderColor: "#aeb8be",
+      borderWidth: 1,
+      padding: [7, 9],
+      extraCssText: "box-shadow:0 3px 12px rgba(29,45,55,.15);border-radius:5px;",
+      formatter: function (params) {
+        const target = Array.isArray(params) ? params[0] : params;
+        if (!target || target.seriesType !== "line") return "";
+        const dataIndex = target.dataIndex;
+        const rowIndex = provinceNames.indexOf(target.seriesName);
+        const value = provinceRows[rowIndex][dataIndex + 1];
+        const color = colors[rowIndex % colors.length];
+
+        return (
+          '<div class="line-tooltip">' +
+            '<div class="line-tooltip__year">' + years[dataIndex] + "年</div>" +
+            '<div class="line-tooltip__row">' +
+              '<span class="line-tooltip__dot" style="background:' + color + '"></span>' +
+              "<span>" + escapeHtml(target.seriesName) + "</span>" +
+              '<span class="line-tooltip__value">' + formatNumber(value) + "</span>" +
+            "</div>" +
+          "</div>"
+        );
       }
     },
     dataset: {
@@ -279,17 +302,17 @@
           fontSize: 10,
           color: "#45515a",
           formatter: function (params) {
-            return params.percent.toFixed(1) + "%";
+            return params.name + " " + params.percent.toFixed(1) + "%";
           }
         },
         labelLine: {
           show: true,
-          length: 7,
-          length2: 6
+          length: 9,
+          length2: 0,
+          smooth: false
         },
         labelLayout: {
-          hideOverlap: false,
-          moveOverlap: "shiftY"
+          hideOverlap: false
         },
         tooltip: {
           trigger: "item",
@@ -308,21 +331,12 @@
 
   chart.setOption(option);
 
-  chart.on("updateAxisPointer", function (event) {
-    const axisInfo = event.axesInfo && event.axesInfo[0];
-    if (!axisInfo) return;
-
-    let dataIndex = axisInfo.value;
-    if (typeof dataIndex === "string" && years.includes(dataIndex)) {
-      dataIndex = years.indexOf(dataIndex);
-    }
-    dataIndex = Number(dataIndex);
+  function syncYearViews(dataIndex) {
     if (!Number.isInteger(dataIndex) || dataIndex < 0 || dataIndex >= years.length) {
       return;
     }
 
     updateRankingPanel(dataIndex);
-
     chart.setOption({
       title: [
         {
@@ -337,6 +351,23 @@
         }
       ]
     });
+  }
+
+  chart.on("mouseover", function (params) {
+    if (params.seriesType !== "line") return;
+    syncYearViews(params.dataIndex);
+  });
+
+  chart.on("updateAxisPointer", function (event) {
+    const axisInfo = event.axesInfo && event.axesInfo[0];
+    if (!axisInfo) return;
+
+    let dataIndex = axisInfo.value;
+    if (typeof dataIndex === "string" && years.includes(dataIndex)) {
+      dataIndex = years.indexOf(dataIndex);
+    }
+    dataIndex = Number(dataIndex);
+    syncYearViews(dataIndex);
   });
 
   window.addEventListener("resize", function () {
