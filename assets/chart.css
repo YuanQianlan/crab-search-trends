@@ -1,0 +1,88 @@
+:root {
+  font-family: "Times New Roman", "SimSun", "宋体", serif;
+  color: #263238;
+  background: #fffaf4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-width: 760px;
+  min-height: 100%;
+  margin: 0;
+  background: #fffaf4;
+}
+
+body {
+  font-family: "Times New Roman", "SimSun", "宋体", serif;
+}
+
+.page-shell {
+  width: 100%;
+  min-height: 900px;
+}
+
+#main {
+  width: 100%;
+  height: max(900px, 100vh);
+  min-height: 900px;
+}
+
+.year-tooltip {
+  width: min(720px, calc(100vw - 40px));
+  font-family: "Times New Roman", "SimSun", "宋体", serif;
+  color: #25313a;
+}
+
+.year-tooltip__title {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #d9dfe3;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.year-tooltip__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 3px 14px;
+}
+
+.year-tooltip__item {
+  display: grid;
+  grid-template-columns: 24px 10px minmax(72px, 1fr) auto;
+  align-items: center;
+  min-height: 22px;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.year-tooltip__rank {
+  color: #7a858d;
+  text-align: right;
+}
+
+.year-tooltip__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.year-tooltip__value {
+  padding-left: 8px;
+  font-family: "Times New Roman", serif;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .year-tooltip__grid {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
+}
