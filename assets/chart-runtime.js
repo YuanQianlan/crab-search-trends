@@ -170,7 +170,7 @@
         id: "pieTitle",
         text: years[0] + "年各省份占比",
         left: "center",
-        top: 48,
+        top: 66,
         textStyle: {
           fontFamily: fontFamily,
           fontSize: 15,
@@ -217,7 +217,7 @@
       source: source
     },
     grid: {
-      top: "55%",
+      top: "58%",
       left: 88,
       right: 42,
       bottom: 72
@@ -286,7 +286,7 @@
         name: "省份占比",
         type: "pie",
         radius: ["11%", "24%"],
-        center: ["50%", "24%"],
+        center: ["50%", "31%"],
         startAngle: 90,
         clockwise: true,
         minAngle: 1,
