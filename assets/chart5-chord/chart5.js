@@ -51,7 +51,6 @@
   const roleOf = (name) => roles.production.includes(name)
     ? "production"
     : roles.sales.includes(name) ? "sales" : "both";
-  const roleLabel = { production: "仅生产", sales: "仅销售", both: "生产与销售" };
   const shortName = (name) => name
     .replace("新疆维吾尔自治区", "新疆")
     .replace(/(壮族自治区|回族自治区|维吾尔自治区|自治区|特别行政区|省|市)$/u, "");
@@ -87,29 +86,10 @@
     textStyle: { fontFamily },
     animationDuration: 1000,
     animationEasing: "cubicOut",
-    tooltip: {
-      trigger: "item",
-      confine: true,
-      backgroundColor: "rgba(255, 250, 232, 0.98)",
-      borderColor: "#d9c994",
-      borderWidth: 1,
-      padding: [10, 12],
-      textStyle: { color: "#18243a", fontFamily, fontSize: 15 },
-      extraCssText: "border-radius:8px;box-shadow:0 8px 24px rgba(56,45,20,.13);",
-      formatter(params) {
-        const d = params.data || {};
-        if (d.source && d.target) {
-          return `<b>${shortName(d.source)} → ${shortName(d.target)}</b><br>` +
-            `产销联系：1 条<br>距离值：${d.distance.toFixed(2)}`;
-        }
-        const node = stats[d.name] || { out: 0, in: 0 };
-        return `<b>${d.name}</b><br>${roleLabel[d.role]}<br>` +
-          `生产联系：${node.out} 条<br>销售联系：${node.in} 条`;
-      },
-    },
+    tooltip: { show: false },
     series: [{
       type: "chord",
-      name: "省际产销联系",
+      name: "省际生产与消费联系",
       center: ["50%", "47%"],
       radius: ["61%", "79%"],
       startAngle: 118,
