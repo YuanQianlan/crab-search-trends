@@ -46,7 +46,7 @@ h1 {
 .legend {
   position: absolute;
   z-index: 3;
-  right: max(20px, calc(50% - 700px));
+  right: max(20px, calc(50% - 550px));
   bottom: 26px;
   display: flex;
   flex-direction: column;
