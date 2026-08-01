@@ -127,7 +127,7 @@
   // 从而复用相同的 HTML、ECharts 和 CSS，只替换图表配置。
   if (pageConfig.option) {
     chart.setOption({
-      backgroundColor: "#fffaf4",
+      backgroundColor: "#FAF2E6",
       textStyle: { fontFamily: fontFamily },
       ...pageConfig.option
     });
@@ -147,7 +147,7 @@
   updateRankingPanel(0);
 
   const option = {
-    backgroundColor: "#fffaf4",
+    backgroundColor: "#FAF2E6",
     color: colors,
     animationDuration: 450,
     textStyle: {

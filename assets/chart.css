@@ -1,7 +1,7 @@
 :root {
   font-family: "Times New Roman", "SimSun", "宋体", serif;
   color: #263238;
-  background: #fffaf4;
+  background: #FAF2E6;
 }
 
 * {
@@ -14,7 +14,7 @@ body {
   min-width: 760px;
   min-height: 100%;
   margin: 0;
-  background: #fffaf4;
+  background: #FAF2E6;
 }
 
 body {

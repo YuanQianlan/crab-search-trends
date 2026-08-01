@@ -118,7 +118,7 @@ window.CHART_PAGE_CONFIG = (function () {
     pageId: "chart2",
     documentTitle: "大闸蟹线上销售平台与价格带流向",
     option: {
-      backgroundColor: "#fffaf4",
+      backgroundColor: "#FAF2E6",
       animationDuration: 900,
       animationDurationUpdate: 650,
       animationEasingUpdate: "cubicOut",
@@ -161,7 +161,7 @@ window.CHART_PAGE_CONFIG = (function () {
             title: "保存图片",
             name: "大闸蟹线上销售平台与价格带流向",
             pixelRatio: 2,
-            backgroundColor: "#fffaf4"
+            backgroundColor: "#FAF2E6"
           }
         }
       },
