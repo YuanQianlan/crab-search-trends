@@ -52,6 +52,7 @@ function gaugeSeries(city, index) {
 }
 
 chart.setOption({
+  backgroundColor: '#FAF2E6',
   animation: true,
   animationDuration: 8000,
   tooltip: {
