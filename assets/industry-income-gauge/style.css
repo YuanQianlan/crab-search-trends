@@ -1,0 +1,27 @@
+:root {
+  font-family: "Times New Roman", SimSun, "宋体", serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; }
+body { overflow: hidden; background: #FAF2E6; color: #2f3338; }
+.dashboard {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: 100vw;
+  height: 100vh;
+  min-width: 900px;
+  padding: 24px 42px 20px;
+}
+h1 {
+  margin: 0;
+  color: #27333c;
+  font: 900 38px/1.3 "Times New Roman", SimSun, "宋体", serif;
+  text-align: center;
+}
+.gauge-stage { position: relative; min-height: 0; }
+#chart { position: absolute; inset: 0; }
+@media (max-height: 760px) {
+  .dashboard { padding-top: 14px; padding-bottom: 14px; }
+  h1 { font-size: 32px; }
+}
