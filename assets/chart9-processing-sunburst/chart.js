@@ -6,24 +6,28 @@
 
   const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
   const legend = document.getElementById("legend");
+  const typeColors = ["#F6423D", "#FF8A72", "#FFB39C", "#E0E0E0", "#FF6F5E", "#D9D9D9"];
   const scaleColors = {
-    "\u5fae\u578b": "#C7B99A",
-    "\u5c0f\u578b": "#A9B89D",
-    "\u4e2d\u578b": "#9EB3C5",
-    "\u5927\u578b": "#B79AA2",
-    "\u672a\u62ab\u9732\u89c4\u6a21": "#C3BEB6"
+    "\u5fae\u578b": "#FFB39C",
+    "\u5c0f\u578b": "#FF8A72",
+    "\u4e2d\u578b": "#F6423D",
+    "\u5927\u578b": "#E0E0E0",
+    "\u672a\u62ab\u9732\u89c4\u6a21": "#D6D6D6"
   };
   const capitalColors = {
-    "100\u4e07\u4ee5\u4e0b": "#D7C8A8",
-    "100-500\u4e07": "#B8C6A7",
-    "500-1000\u4e07": "#A9BCCB",
-    "1000-5000\u4e07": "#C4A8AA",
-    "5000\u4e07\u4ee5\u4e0a": "#B8AAC8",
-    "\u672a\u62ab\u9732\u6ce8\u518c\u8d44\u672c": "#CBC5BB"
+    "100\u4e07\u4ee5\u4e0b": "#FFB39C",
+    "100-500\u4e07": "#FF806A",
+    "500-1000\u4e07": "#F6423D",
+    "1000-5000\u4e07": "#E0E0E0",
+    "5000\u4e07\u4ee5\u4e0a": "#FF5F50",
+    "\u672a\u62ab\u9732\u6ce8\u518c\u8d44\u672c": "#D8D8D8"
   };
 
   function applyPalette(nodes, depth) {
-    nodes.forEach(function (node) {
+    nodes.forEach(function (node, index) {
+      if (depth === 0) {
+        node.itemStyle = { color: typeColors[index % typeColors.length] };
+      }
       if (depth === 1) {
         node.itemStyle = { color: scaleColors[node.name] || "#BDB5A8" };
       }
@@ -34,12 +38,97 @@
     });
   }
 
+  function addBlankSectors(nodes) {
+    nodes.forEach(function (node) {
+      if (!node.children || !node.children.length) return;
+      const childTotal = node.children.reduce(function (sum, child) {
+        return sum + (Number(child.value) || 0);
+      }, 0);
+      const gap = (Number(node.value) || 0) - childTotal;
+      if (gap > 0) {
+        node.children.push({
+          name: "",
+          value: gap,
+          itemStyle: { color: "transparent", borderWidth: 0 },
+          label: { show: false },
+          emphasis: { disabled: true },
+          tooltip: { show: false },
+          silent: true
+        });
+      }
+      addBlankSectors(node.children);
+    });
+  }
+
+  function rememberRawValues(nodes) {
+    nodes.forEach(function (node) {
+      node.rawValue = Number(node.value) || 0;
+      if (node.children) rememberRawValues(node.children);
+    });
+  }
+
+  function spacer(value) {
+    return {
+      name: "",
+      value: value,
+      itemStyle: { color: "#FAF2E6", borderColor: "#FAF2E6", borderWidth: 0 },
+      label: { show: false },
+      emphasis: { disabled: true },
+      tooltip: { show: false },
+      silent: true,
+      isSpacer: true
+    };
+  }
+
+  function addVisualGaps(nodes, depth) {
+    nodes.forEach(function (node) {
+      if (node.children) addVisualGaps(node.children, depth + 1);
+    });
+    if (!nodes.length) return;
+    const gapValue = depth === 0 ? 10 : (depth === 1 ? 4 : 1.2);
+    const next = [];
+    nodes.forEach(function (node, index) {
+      next.push(node);
+      if (index < nodes.length - 1) next.push(spacer(gapValue));
+    });
+    nodes.length = 0;
+    Array.prototype.push.apply(nodes, next);
+  }
+
+  function updateVisualValues(nodes) {
+    nodes.forEach(function (node) {
+      if (node.children && node.children.length) {
+        updateVisualValues(node.children);
+        node.value = node.children.reduce(function (sum, child) {
+          return sum + (Number(child.value) || 0);
+        }, 0);
+      }
+    });
+  }
+
   applyPalette(payload.data, 0);
 
   legend.innerHTML = payload.legend.map(function (item) {
-    return '<div class="legend-item"><span class="legend-dot" style="background:' + item.color + '"></span><span>' +
-      item.name + '</span><span class="legend-count">' + item.value + '</span></div>';
+    const color = typeColors[payload.legend.indexOf(item) % typeColors.length];
+    return '<div class="legend-item"><span class="legend-dot" style="background:' + color + '"></span><span>' +
+      item.name + '</span></div>';
   }).join("");
+
+  const typeOrder = [
+    "\u6709\u9650\u8d23\u4efb\u516c\u53f8",
+    "\u519c\u6c11\u4e13\u4e1a\u5408\u4f5c\u793e",
+    "\u4e2a\u4f53\u5de5\u5546\u6237",
+    "\u4e2a\u4eba\u72ec\u8d44\u4f01\u4e1a",
+    "\u5408\u4f19\u4f01\u4e1a",
+    "\u80a1\u4efd\u6709\u9650\u516c\u53f8"
+  ];
+  payload.data.sort(function (a, b) {
+    return typeOrder.indexOf(a.name) - typeOrder.indexOf(b.name);
+  });
+  rememberRawValues(payload.data);
+  addVisualGaps(payload.data, 0);
+  addBlankSectors(payload.data);
+  updateVisualValues(payload.data);
 
   function percent(value) {
     return (value / payload.total * 100).toFixed(1) + "%";
@@ -67,14 +156,15 @@
       },
       extraCssText: "box-shadow:0 6px 18px rgba(86,72,62,.14);border-radius:7px;",
       formatter: function (params) {
-        const value = Number(params.value) || 0;
+        if (params.data && params.data.isSpacer) return "";
+        const value = Number(params.data && params.data.rawValue) || Number(params.value) || 0;
         return "<b>" + params.name + "</b><br>数量：" + value + " 家<br>占比：" + percent(value);
       }
     },
     series: {
       type: "sunburst",
       radius: ["13%", "86%"],
-      center: ["44%", "52%"],
+      center: ["44%", "45%"],
       sort: undefined,
       emphasis: {
         focus: "ancestor"
@@ -114,7 +204,8 @@
           r0: "62%",
           r: "86%",
           label: {
-            fontSize: 11
+            fontSize: 11,
+            minAngle: 12
           }
         }
       ]
