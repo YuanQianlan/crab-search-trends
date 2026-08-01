@@ -99,6 +99,7 @@ cities.forEach((city, index) => {
 });
 
 chart.setOption({
+  backgroundColor: '#FAF2E6',
   animation: !previewFinal,
   tooltip: {
     trigger: 'item', backgroundColor: 'rgba(255,248,221,.97)', borderColor: '#b77b55',

@@ -88,7 +88,7 @@
 
   const option = {
     animation: true,
-    backgroundColor: "transparent",
+    backgroundColor: "#FAF2E6",
     tooltip: {
       trigger: "item",
       borderWidth: 1,

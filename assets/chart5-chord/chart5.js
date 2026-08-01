@@ -82,7 +82,7 @@
 
   const chart = echarts.init(chartElement, null, { renderer: "canvas" });
   chart.setOption({
-    backgroundColor: "transparent",
+    backgroundColor: "#FAF2E6",
     textStyle: { fontFamily },
     animationDuration: 1000,
     animationEasing: "cubicOut",
