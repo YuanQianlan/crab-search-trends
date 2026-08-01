@@ -21,9 +21,9 @@
       detail: detail,
       value: 1,
       itemStyle: {
-        color: palette.leaf,
-        borderColor: "#AFA69B",
-        borderWidth: 1.2
+        color: "#FFFDF8",
+        borderColor: "#8E8275",
+        borderWidth: 1.8
       },
       label: {
         color: "#3f3f3b",
@@ -137,30 +137,32 @@
         data: [data],
         orient: "LR",
         top: "3%",
-        left: "7%",
+        left: "9%",
         bottom: "2%",
         right: "18%",
-        symbol: "path://M0,-12 L2.8,-3.7 L11.4,-3.7 L4.3,1.4 L7,10 L0,4.6 L-7,10 L-4.3,1.4 L-11.4,-3.7 L-2.8,-3.7 Z",
-        symbolSize: 15,
+        symbol: "path://M0,-13 L3.1,-4.2 L12.4,-4.2 L5,1.6 L7.8,11.5 L0,5.5 L-7.8,11.5 L-5,1.6 L-12.4,-4.2 L-3.1,-4.2 Z",
+        symbolSize: 18,
         roam: false,
         expandAndCollapse: true,
         initialTreeDepth: 3,
         edgeShape: "curve",
         lineStyle: {
-          color: "#B7B3AE",
-          width: 1.35,
-          curveness: 0.28
+          color: "#A7A29C",
+          width: 2,
+          curveness: 0.55
         },
         label: {
           position: "left",
           verticalAlign: "middle",
           align: "right",
-          distance: 10,
+          distance: 18,
           fontFamily: fontFamily,
           color: "#3f3f3b",
           fontSize: 15,
           backgroundColor: "#FAF2E6",
-          padding: [3, 5],
+          padding: [4, 7],
+          borderColor: "#FAF2E6",
+          borderWidth: 2,
           borderRadius: 3
         },
         leaves: {
@@ -168,12 +170,14 @@
             position: "right",
             verticalAlign: "middle",
             align: "left",
-            distance: 12,
+            distance: 18,
             fontFamily: fontFamily,
             color: "#3f3f3b",
             fontSize: 14,
             backgroundColor: "#FAF2E6",
-            padding: [3, 5],
+            padding: [4, 7],
+            borderColor: "#FAF2E6",
+            borderWidth: 2,
             borderRadius: 3
           }
         },
