@@ -24,20 +24,9 @@
       min-width: 0;
       min-height: 1040px;
     }
-    .page-title {
-      position: absolute;
-      z-index: 4;
-      top: 94px;
-      left: 44%;
-      margin: 0;
-      color: #6b4f62;
-      font-size: 32px;
-      transform: translateX(-50%);
-      white-space: nowrap;
-    }
     .charts {
       position: absolute;
-      top: 220px;
+      top: 56px;
       right: 18px;
       bottom: 28px;
       left: 18px;
@@ -75,41 +64,6 @@
       transform: translateY(-50%);
       white-space: nowrap;
     }
-    .market-share-panel {
-      position: absolute;
-      z-index: 6;
-      top: 56px;
-      left: calc(50% + 285px);
-      display: block;
-      width: 220px;
-      padding: 11px 16px 12px;
-      border: 1px solid #eadfd8;
-      border-radius: 9px;
-      background: rgba(255,252,249,.94);
-      box-shadow: 0 7px 19px rgba(122,98,110,.08);
-    }
-    .market-share-title {
-      margin-bottom: 5px;
-      padding-bottom: 7px;
-      border-bottom: 1px solid #eee3dd;
-      color: #6b4f62;
-      font-size: 15px;
-      font-weight: 700;
-      text-align: center;
-      white-space: nowrap;
-    }
-    .market-share-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 4px 3px;
-      font-size: 15px;
-      white-space: nowrap;
-    }
-    .market-share-name { display: inline-flex; align-items: center; gap: 6px; }
-    .market-share-dot { width: 7px; height: 7px; border-radius: 50%; }
-    .market-share-value { font: 700 18px "Times New Roman", serif; }
     .linked-popup-panel {
       position: absolute;
       z-index: 6;
@@ -164,23 +118,12 @@
     .popup-value.is-volume { color: #8fb7d1; }
     .popup-value.is-sales { color: #e0a9a0; }
     @media (max-width: 900px) {
-      .page-title {
-        top: 170px;
-        left: 50%;
-        font-size: 24px;
-      }
-      .market-share-panel {
-        top: 44px;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-      .charts { top: 238px; }
+      .charts { top: 44px; }
     }
   </style>
 </head>
 <body>
   <main class="shell">
-    <h1 class="page-title">2025年1~11月河蟹线上销售量与销售额桑基图</h1>
     <section class="charts">
       <article class="chart-panel">
         <div id="volume-chart" class="chart" role="img" aria-label="各平台价格带销量结构桑基图"></div>
@@ -193,12 +136,6 @@
         <div id="sales-right-labels" class="node-labels node-labels--right"></div>
       </article>
     </section>
-    <aside class="market-share-panel">
-      <div class="market-share-title">平台销售额市场份额</div>
-      <div class="market-share-row"><span class="market-share-name"><i class="market-share-dot" style="background:#8fb7d1"></i>京东</span><span class="market-share-value">55%</span></div>
-      <div class="market-share-row"><span class="market-share-name"><i class="market-share-dot" style="background:#e0a9a0"></i>天猫</span><span class="market-share-value">38%</span></div>
-      <div class="market-share-row"><span class="market-share-name"><i class="market-share-dot" style="background:#a9c8b5"></i>抖音</span><span class="market-share-value">7%</span></div>
-    </aside>
     <section class="linked-popup-panel" id="linked-popup" aria-live="polite">
       <div class="popup-heading">
         <span class="popup-title">关联数据</span>
