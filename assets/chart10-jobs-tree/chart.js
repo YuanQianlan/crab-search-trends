@@ -43,10 +43,10 @@
         borderColor: "#6F7D76",
         borderWidth: 1.4
       },
-      label: {
-        color: "#2f3c39",
-        fontSize: 17,
-        fontWeight: 700
+    label: {
+      color: "#2f3c39",
+      fontSize: 20,
+      fontWeight: 700
       }
     };
   }
@@ -61,7 +61,7 @@
     },
     label: {
       color: "#25322f",
-      fontSize: 19,
+      fontSize: 23,
       fontWeight: 700
     },
     children: [
@@ -140,17 +140,16 @@
         left: "7%",
         bottom: "2%",
         right: "18%",
-        symbol: "roundRect",
-        symbolSize: [14, 8],
+        symbol: "path://M0,-12 L2.8,-3.7 L11.4,-3.7 L4.3,1.4 L7,10 L0,4.6 L-7,10 L-4.3,1.4 L-11.4,-3.7 L-2.8,-3.7 Z",
+        symbolSize: 15,
         roam: false,
         expandAndCollapse: true,
         initialTreeDepth: 3,
-        edgeShape: "polyline",
-        edgeForkPosition: "50%",
+        edgeShape: "curve",
         lineStyle: {
-          color: "#9A9187",
-          width: 1.5,
-          curveness: 0.15
+          color: "#B7B3AE",
+          width: 1.35,
+          curveness: 0.28
         },
         label: {
           position: "left",
@@ -159,7 +158,10 @@
           distance: 10,
           fontFamily: fontFamily,
           color: "#3f3f3b",
-          fontSize: 15
+          fontSize: 15,
+          backgroundColor: "#FAF2E6",
+          padding: [3, 5],
+          borderRadius: 3
         },
         leaves: {
           label: {
@@ -169,7 +171,10 @@
             distance: 12,
             fontFamily: fontFamily,
             color: "#3f3f3b",
-            fontSize: 14
+            fontSize: 14,
+            backgroundColor: "#FAF2E6",
+            padding: [3, 5],
+            borderRadius: 3
           }
         },
         emphasis: {
