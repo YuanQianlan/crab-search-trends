@@ -9,38 +9,38 @@
     * { box-sizing: border-box; }
     html, body {
       width: 100%;
-      min-height: 100%;
+      height: 100%;
       margin: 0;
       overflow-x: hidden;
-      overflow-y: auto;
-      background: #fff7f1;
+      overflow-y: hidden;
+      background: #FAF2E6;
       color: #4a4f54;
       font-family: "Times New Roman", "SimSun", "宋体", serif;
     }
     .shell {
       position: relative;
       width: 100vw;
-      height: max(1040px, 100vh);
+      height: 100vh;
       min-width: 0;
-      min-height: 1040px;
+      min-height: 640px;
     }
     .charts {
       position: absolute;
-      top: 56px;
-      right: 18px;
-      bottom: 28px;
-      left: 18px;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 24px;
+      gap: 8px;
     }
     .chart-panel {
       position: relative;
       min-width: 0;
       overflow: hidden;
-      border: 1px solid #eadfd8;
-      border-radius: 11px;
-      background: rgba(255,255,255,.62);
+      border: 0;
+      border-radius: 0;
+      background: transparent;
     }
     .chart { width: 100%; height: 100%; }
     .node-labels {
@@ -118,7 +118,7 @@
     .popup-value.is-volume { color: #8fb7d1; }
     .popup-value.is-sales { color: #e0a9a0; }
     @media (max-width: 900px) {
-      .charts { top: 44px; }
+      .charts { top: 0; }
     }
   </style>
 </head>
@@ -258,7 +258,7 @@
           title:{
             text:isVolume ? "销量结构" : "销售额结构",
             left:"center",
-            top:18,
+            top:6,
             textStyle:{ fontSize:20, fontWeight:"bold", color:isVolume ? "#8fb7d1" : "#e0a9a0" }
           },
           tooltip:{
@@ -279,8 +279,8 @@
             type:"sankey",
             left:76,
             right:76,
-            top:100,
-            bottom:44,
+            top:54,
+            bottom:16,
             nodeWidth:22,
             nodeGap:25,
             nodeAlign:"justify",
@@ -297,8 +297,8 @@
       }
 
       function nodeCenters(values,height) {
-        const top=100;
-        const bottom=44;
+        const top=54;
+        const bottom=16;
         const gap=25;
         const usable=height-top-bottom-gap*(values.length-1);
         const total=values.reduce(function (sum,value) { return sum+value; },0);
