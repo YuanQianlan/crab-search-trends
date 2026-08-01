@@ -1,7 +1,7 @@
 :root {
   color-scheme: dark;
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
-  background: #06151b;
+  background: #FAF2E6;
   color: #f3f7f4;
 }
 
@@ -15,10 +15,7 @@ body {
   min-width: 320px;
   min-height: 100%;
   margin: 0;
-  background:
-    radial-gradient(circle at 18% 8%, rgba(40, 120, 102, 0.22), transparent 34%),
-    radial-gradient(circle at 86% 20%, rgba(201, 140, 53, 0.14), transparent 28%),
-    #06151b;
+  background: #FAF2E6;
 }
 
 body {

@@ -109,7 +109,7 @@ chart.setOption({
   graphic: [
     {
       type: 'group', left: '38%', top: '45%', children: [
-        { type: 'text', style: { x: 0, y: -26, text: '全国河蟹专营门店', fill: '#71310d', font: '900 23px SimSun', align: 'center' } },
+        { type: 'text', style: { x: 0, y: -26, text: '全国大闸蟹专营门店', fill: '#71310d', font: '900 23px SimSun', align: 'center' } },
         { type: 'text', style: { x: 0, y: 9, text: '城市集聚度{top|TOP5}', fill: '#71310d', font: '900 23px SimSun', align: 'center', rich: { top: { fill: '#71310d', font: '900 23px Times New Roman' } } } }
       ]
     },

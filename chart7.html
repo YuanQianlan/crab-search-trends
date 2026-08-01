@@ -3,55 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2025年1~11月河蟹线上销售量与销售额桑基图</title>
+  <title>2025年1~11月大闸蟹线上销售量与销售额桑基图</title>
   <script src="./assets/brand-map/echarts.min.js"></script>
   <style>
     * { box-sizing: border-box; }
     html, body {
       width: 100%;
-      min-height: 100%;
+      height: 100%;
       margin: 0;
       overflow-x: hidden;
-      overflow-y: auto;
+      overflow-y: hidden;
       background: #FAF2E6;
-      color: #3b4546;
+      color: #4a4f54;
       font-family: "Times New Roman", "SimSun", "宋体", serif;
     }
     .shell {
       position: relative;
       width: 100vw;
-      height: max(1040px, 100vh);
+      height: 100vh;
       min-width: 0;
-      min-height: 1040px;
-    }
-    .page-title {
-      position: absolute;
-      z-index: 4;
-      top: 94px;
-      left: 44%;
-      margin: 0;
-      color: #334041;
-      font-size: 32px;
-      transform: translateX(-50%);
-      white-space: nowrap;
+      min-height: 640px;
     }
     .charts {
       position: absolute;
-      top: 220px;
-      right: 18px;
-      bottom: 28px;
-      left: 18px;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 24px;
+      gap: 8px;
     }
     .chart-panel {
       position: relative;
       min-width: 0;
       overflow: hidden;
-      border: 1px solid #d8d2c8;
-      border-radius: 11px;
-      background: rgba(250,248,242,.62);
+      border: 0;
+      border-radius: 0;
+      background: transparent;
     }
     .chart { width: 100%; height: 100%; }
     .node-labels {
@@ -68,48 +57,13 @@
       position: absolute;
       right: 0;
       left: 0;
-      color: #3f4a4b;
+      color: #6b4f62;
       font-size: 13px;
       font-weight: 700;
       line-height: 18px;
       transform: translateY(-50%);
       white-space: nowrap;
     }
-    .market-share-panel {
-      position: absolute;
-      z-index: 6;
-      top: 56px;
-      left: calc(50% + 285px);
-      display: block;
-      width: 220px;
-      padding: 11px 16px 12px;
-      border: 1px solid #d2cbc0;
-      border-radius: 9px;
-      background: rgba(250,248,242,.94);
-      box-shadow: 0 7px 19px rgba(70,78,76,.08);
-    }
-    .market-share-title {
-      margin-bottom: 5px;
-      padding-bottom: 7px;
-      border-bottom: 1px solid #e3ddd2;
-      color: #3f4a4b;
-      font-size: 15px;
-      font-weight: 700;
-      text-align: center;
-      white-space: nowrap;
-    }
-    .market-share-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 4px 3px;
-      font-size: 15px;
-      white-space: nowrap;
-    }
-    .market-share-name { display: inline-flex; align-items: center; gap: 6px; }
-    .market-share-dot { width: 7px; height: 7px; border-radius: 50%; }
-    .market-share-value { font: 700 18px "Times New Roman", serif; }
     .linked-popup-panel {
       position: absolute;
       z-index: 6;
@@ -119,10 +73,10 @@
       width: 172px;
       min-height: 226px;
       padding: 15px 14px 16px;
-      border: 1px solid #d2cbc0;
+      border: 1px solid #eadfd8;
       border-radius: 10px;
-      background: rgba(250,248,242,.96);
-      box-shadow: 0 9px 24px rgba(70,78,76,.11);
+      background: rgba(255,252,249,.96);
+      box-shadow: 0 9px 24px rgba(122,98,110,.11);
       opacity: 0;
       pointer-events: none;
       transform: translateY(-50%) translateX(-7px);
@@ -135,13 +89,13 @@
     .popup-heading {
       margin-bottom: 14px;
       padding-bottom: 11px;
-      border-bottom: 1px solid #e3ddd2;
+      border-bottom: 1px solid #eee3dd;
     }
-    .popup-title { color: #3f4a4b; font-size: 16px; font-weight: 700; }
+    .popup-title { color: #6b4f62; font-size: 16px; font-weight: 700; }
     .popup-relation {
       display: block;
       margin-top: 6px;
-      color: #74756f;
+      color: #85737a;
       font-size: 13px;
       line-height: 1.45;
     }
@@ -153,34 +107,23 @@
     .popup-metric {
       padding: 9px 10px;
       border-radius: 7px;
-      background: #f6f1e9;
+      background: #fff4ef;
     }
-    .popup-label { color: #7b7b73; font-size: 12px; }
+    .popup-label { color: #8b7d83; font-size: 12px; }
     .popup-value {
       margin-top: 4px;
-      color: #3b4546;
+      color: #5b5660;
       font: 700 20px "Times New Roman", serif;
     }
-    .popup-value.is-volume { color: #6f8fa3; }
-    .popup-value.is-sales { color: #bd8f84; }
+    .popup-value.is-volume { color: #8fb7d1; }
+    .popup-value.is-sales { color: #e0a9a0; }
     @media (max-width: 900px) {
-      .page-title {
-        top: 170px;
-        left: 50%;
-        font-size: 24px;
-      }
-      .market-share-panel {
-        top: 44px;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-      .charts { top: 238px; }
+      .charts { top: 0; }
     }
   </style>
 </head>
 <body>
   <main class="shell">
-    <h1 class="page-title">2025年1~11月河蟹线上销售量与销售额桑基图</h1>
     <section class="charts">
       <article class="chart-panel">
         <div id="volume-chart" class="chart" role="img" aria-label="各平台价格带销量结构桑基图"></div>
@@ -193,12 +136,6 @@
         <div id="sales-right-labels" class="node-labels node-labels--right"></div>
       </article>
     </section>
-    <aside class="market-share-panel">
-      <div class="market-share-title">平台销售额市场份额</div>
-      <div class="market-share-row"><span class="market-share-name"><i class="market-share-dot" style="background:#6f8fa3"></i>京东</span><span class="market-share-value">55%</span></div>
-      <div class="market-share-row"><span class="market-share-name"><i class="market-share-dot" style="background:#bd8f84"></i>天猫</span><span class="market-share-value">38%</span></div>
-      <div class="market-share-row"><span class="market-share-name"><i class="market-share-dot" style="background:#7f9b8d"></i>抖音</span><span class="market-share-value">7%</span></div>
-    </aside>
     <section class="linked-popup-panel" id="linked-popup" aria-live="polite">
       <div class="popup-heading">
         <span class="popup-title">关联数据</span>
@@ -212,9 +149,9 @@
       "use strict";
 
       const platformShares = { "京东":55, "天猫":38, "抖音":7 };
-      const platformColors = { "京东":"#6f8fa3", "天猫":"#bd8f84", "抖音":"#7f9b8d" };
+      const platformColors = { "京东":"#8fb7d1", "天猫":"#e0a9a0", "抖音":"#a9c8b5" };
       const bands = ["<258元","258-447元","447-880元",">880元"];
-      const bandColors = ["#d8c18f","#c9a58b","#a98f9c","#8f889f"];
+      const bandColors = ["#efd9a7","#f0c7b5","#d9bfd8","#c7d6e4"];
       const paired = [
         { platform:"京东", band:"<258元", volume:79.2, sales:55.7 },
         { platform:"京东", band:"258-447元", volume:15.7, sales:26.6 },
@@ -321,20 +258,20 @@
           title:{
             text:isVolume ? "销量结构" : "销售额结构",
             left:"center",
-            top:18,
-            textStyle:{ fontSize:20, fontWeight:"bold", color:isVolume ? "#6f8fa3" : "#bd8f84" }
+            top:6,
+            textStyle:{ fontSize:20, fontWeight:"bold", color:isVolume ? "#8fb7d1" : "#e0a9a0" }
           },
           tooltip:{
             trigger:"item",
             triggerOn:"mousemove|click",
             showContent:false,
             confine:true,
-            backgroundColor:"rgba(250,248,242,.98)",
-            borderColor:isVolume ? "#a9bdc7" : "#d2b5ad",
+            backgroundColor:"rgba(255,252,249,.98)",
+            borderColor:isVolume ? "#bdd2e0" : "#e8c4bd",
             borderWidth:1,
             padding:[9,11],
-            textStyle:{ color:"#3b4546", fontSize:13 },
-            extraCssText:"box-shadow:0 5px 17px rgba(70,78,76,.15);border-radius:7px;",
+            textStyle:{ color:"#5b5660", fontSize:13 },
+            extraCssText:"box-shadow:0 5px 17px rgba(122,98,110,.15);border-radius:7px;",
             formatter:tooltipFormatter(metric)
           },
           series:[{
@@ -342,8 +279,8 @@
             type:"sankey",
             left:76,
             right:76,
-            top:100,
-            bottom:44,
+            top:54,
+            bottom:16,
             nodeWidth:22,
             nodeGap:25,
             nodeAlign:"justify",
@@ -352,7 +289,7 @@
             data:nodes(metric),
             links:links(metric,null),
             emphasis:{ focus:"none" },
-            itemStyle:{ borderColor:"#f7f2ea", borderWidth:2 },
+            itemStyle:{ borderColor:"#fff7f1", borderWidth:2 },
             lineStyle:{ curveness:.5 },
             label:{ show:false }
           }]
@@ -360,8 +297,8 @@
       }
 
       function nodeCenters(values,height) {
-        const top=100;
-        const bottom=44;
+        const top=54;
+        const bottom=16;
         const gap=25;
         const usable=height-top-bottom-gap*(values.length-1);
         const total=values.reduce(function (sum,value) { return sum+value; },0);

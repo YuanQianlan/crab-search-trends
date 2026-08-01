@@ -1,0 +1,82 @@
+:root {
+  color-scheme: light;
+  font-family: "Times New Roman", "SimSun", "宋体", serif;
+  background: #FAF2E6;
+  color: #3f3f3b;
+}
+
+* { box-sizing: border-box; }
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #FAF2E6;
+}
+
+body {
+  font-family: "Times New Roman", "SimSun", "宋体", serif;
+}
+
+.sunburst-page {
+  width: 100vw;
+  height: 100vh;
+  min-width: 980px;
+  min-height: 680px;
+  padding: 54px 32px 24px;
+}
+
+h1 {
+  margin: 0 0 28px;
+  color: #4f5a57;
+  font: 700 30px/1.25 "Times New Roman", "SimSun", "宋体", serif;
+  text-align: center;
+  letter-spacing: 0;
+}
+
+.chart-area {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 48px);
+}
+
+#chart {
+  position: absolute;
+  inset: 0 320px 0 0;
+}
+
+.legend-panel {
+  position: absolute;
+  top: 52%;
+  right: 360px;
+  width: 210px;
+  transform: translateY(-50%);
+  color: #51534e;
+  font-family: "Times New Roman", "SimSun", "宋体", serif;
+}
+
+.legend-title {
+  margin-bottom: 14px;
+  color: #4f5a57;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.legend-item {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-height: 30px;
+  font-size: 17px;
+  white-space: nowrap;
+}
+
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
