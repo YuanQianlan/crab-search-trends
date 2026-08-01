@@ -14,7 +14,7 @@ function positionTitle() {
   const outerRadius = 0.79 * Math.min(chart.getWidth(), chart.getHeight()) / 2;
   const circleTop = chart.getHeight() * 0.54 - outerRadius;
   const fiveCentimeters = 5 * 37.7952755906;
-  const titleTop = Math.max(0, circleTop - fiveCentimeters - title.offsetHeight);
+  const titleTop = Math.max(0, circleTop - fiveCentimeters - title.offsetHeight + 44);
   title.style.top = `${titleTop}px`;
 }
 
@@ -33,7 +33,7 @@ function gaugeSeries(city, index) {
     animationDuration: 8000,
     animationEasing: 'cubicInOut',
     progress: {
-      show: true, overlap: false, roundCap: true, clip: false, width: 28,
+      show: true, overlap: false, roundCap: true, clip: false, width: 18,
       itemStyle: {
         color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
           { offset: 0, color: city.light },
@@ -44,7 +44,7 @@ function gaugeSeries(city, index) {
         shadowColor: city.color + '4d', shadowBlur: 8
       }
     },
-    axisLine: { lineStyle: { width: 28, color: [[1, 'rgba(95,73,49,.12)']] } },
+    axisLine: { lineStyle: { width: 18, color: [[1, 'rgba(95,73,49,.12)']] } },
     axisTick: { show: false }, splitLine: { show: false }, axisLabel: { show: false },
     pointer: { show: false }, anchor: { show: false }, title: { show: false }, detail: { show: false },
     data: [{ value: city.value, name: city.name }], z: 10 - index

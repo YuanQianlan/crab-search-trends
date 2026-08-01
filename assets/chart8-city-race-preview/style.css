@@ -5,7 +5,7 @@ body { overflow: hidden; background: #fff4c9; color: #542b10; }
 .dashboard { display: grid; grid-template-columns: 66% 34%; width: 100vw; height: 100vh; padding: 22px 42px; }
 .chart-zone { position: relative; min-width: 0; min-height: 0; }
 #chart { position: absolute; inset: 0; }
-h1 { position: absolute; left: 46%; top: 0; z-index: 1; width: max-content; margin: 0; transform: translateX(-50%); color: #71310d; font: 900 38px/1.28 SimSun, "宋体", serif; white-space: nowrap; text-align: center; pointer-events: none; }
+h1 { position: absolute; left: 53%; top: 0; z-index: 1; width: max-content; margin: 0; transform: translateX(-50%); color: #71310d; font: 900 38px/1.28 SimSun, "宋体", serif; white-space: nowrap; text-align: center; pointer-events: none; }
 .ranking { align-self: center; padding: 0; transform: translateX(-18px); }
 h2 { margin: 0 0 22px; color: #71310d; font: 900 27px/1 SimSun, "宋体", serif; }
 ol { display: grid; gap: 13px; margin: 0; padding: 0; list-style: none; }
