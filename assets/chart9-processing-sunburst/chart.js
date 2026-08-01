@@ -106,20 +106,6 @@
     });
   }
 
-  function clarifyCapitalLabels(nodes, depth) {
-    const names = {
-      "100\u4e07\u4ee5\u4e0b": "100\u4e07\u5143\u4ee5\u4e0b",
-      "100-500\u4e07": "100\u4e07-500\u4e07\u5143",
-      "500-1000\u4e07": "500\u4e07-1000\u4e07\u5143",
-      "1000-5000\u4e07": "1000\u4e07-5000\u4e07\u5143",
-      "5000\u4e07\u4ee5\u4e0a": "5000\u4e07\u5143\u4ee5\u4e0a"
-    };
-    nodes.forEach(function (node) {
-      if (depth === 2 && names[node.name]) node.name = names[node.name];
-      if (node.children) clarifyCapitalLabels(node.children, depth + 1);
-    });
-  }
-
   applyPalette(payload.data, 0);
 
   legend.innerHTML = payload.legend.map(function (item) {
@@ -143,8 +129,6 @@
   addVisualGaps(payload.data, 0);
   addBlankSectors(payload.data);
   updateVisualValues(payload.data);
-  clarifyCapitalLabels(payload.data, 0);
-
   function percent(value) {
     return (value / payload.total * 100).toFixed(1) + "%";
   }
@@ -195,11 +179,10 @@
         color: "#3f3f3b",
         fontFamily: fontFamily,
         fontSize: 12,
-        minAngle: 12,
+        minAngle: 7,
         formatter: function (params) {
           if (params.data && params.data.isSpacer) return "";
-          const value = Number(params.data && params.data.rawValue) || Number(params.value) || 0;
-          return value < 8 ? "" : params.name;
+          return params.name;
         }
       },
       levels: [
@@ -224,7 +207,10 @@
           r0: "62%",
           r: "86%",
           label: {
-            show: false
+            show: true,
+            color: "#514c47",
+            fontSize: 11,
+            minAngle: 6
           }
         }
       ]
