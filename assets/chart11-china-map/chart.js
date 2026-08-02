@@ -1,0 +1,314 @@
+(function () {
+  "use strict";
+
+  const fontFamily = '"Times New Roman","SimSun","宋体",serif';
+  const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
+  const total = 511;
+  const palette = ["#F6E6E1", "#F7D2C4", "#F2B8A8", "#E9A1A1", "#D8899C", "#B77C9A"];
+  const counts = {
+    "北京市": 1,
+    "天津市": 0,
+    "河北省": 0,
+    "山西省": 5,
+    "内蒙古自治区": 0,
+    "辽宁省": 6,
+    "吉林省": 3,
+    "黑龙江省": 3,
+    "上海市": 4,
+    "江苏省": 364,
+    "浙江省": 8,
+    "安徽省": 14,
+    "福建省": 1,
+    "江西省": 4,
+    "山东省": 15,
+    "河南省": 3,
+    "湖北省": 7,
+    "湖南省": 11,
+    "广东省": 12,
+    "广西壮族自治区": 1,
+    "海南省": 4,
+    "重庆市": 15,
+    "四川省": 6,
+    "贵州省": 13,
+    "云南省": 5,
+    "西藏自治区": 0,
+    "陕西省": 0,
+    "甘肃省": 1,
+    "青海省": 0,
+    "宁夏回族自治区": 5,
+    "新疆维吾尔自治区": 0,
+    "台湾省": 0,
+    "香港特别行政区": 0,
+    "澳门特别行政区": 0
+  };
+
+  const rawData = Object.keys(counts).map(function (name) {
+    return { name: name, value: counts[name] };
+  });
+  const sorted = rawData.slice().sort(function (a, b) {
+    return a.value - b.value || a.name.localeCompare(b.name, "zh-CN");
+  });
+  const maxValue = Math.max.apply(null, rawData.map(function (item) { return item.value; }));
+  let currentView = "map";
+  let timer = null;
+
+  function formatNumber(value) {
+    return new Intl.NumberFormat("en-US").format(Number(value) || 0);
+  }
+
+  function barColor(index) {
+    if (!sorted.length) return palette[0];
+    const ratio = index / Math.max(sorted.length - 1, 1);
+    return palette[Math.min(palette.length - 1, Math.floor(ratio * palette.length))];
+  }
+
+  function tooltipText(name, value) {
+    const share = total ? (value / total * 100).toFixed(1) : "0.0";
+    return "<b>" + name + "</b><br>加工企业：" + formatNumber(value) + " 家<br>占比：" + share + "%";
+  }
+
+  function commonText() {
+    return {
+      fontFamily: fontFamily,
+      color: "#4c4a4a"
+    };
+  }
+
+  function mapOption() {
+    return {
+      backgroundColor: "#FAF2E6",
+      animationDuration: 850,
+      textStyle: commonText(),
+      visualMap: {
+        type: "continuous",
+        min: 0,
+        max: maxValue,
+        left: "4%",
+        bottom: "8%",
+        itemWidth: 18,
+        itemHeight: 132,
+        calculable: true,
+        precision: 0,
+        text: ["数量多", "数量少"],
+        textStyle: {
+          fontFamily: fontFamily,
+          color: "#6c5f66",
+          fontSize: 13
+        },
+        inRange: {
+          color: palette
+        },
+        outOfRange: {
+          color: "#F3E9E4"
+        }
+      },
+      tooltip: {
+        trigger: "item",
+        confine: true,
+        backgroundColor: "rgba(255,250,246,.98)",
+        borderColor: "#d7b7b2",
+        borderWidth: 1,
+        padding: [10, 13],
+        textStyle: {
+          fontFamily: fontFamily,
+          color: "#514950",
+          fontSize: 14
+        },
+        formatter: function (params) {
+          return tooltipText(params.name, Number(params.value) || 0);
+        }
+      },
+      series: [{
+        id: "provinceData",
+        name: "加工企业数量",
+        type: "map",
+        map: "china-processing",
+        roam: true,
+        zoom: 1.05,
+        layoutCenter: ["52%", "48%"],
+        layoutSize: "88%",
+        selectedMode: "single",
+        emphasis: {
+          label: {
+            show: true,
+            color: "#514950",
+            fontFamily: fontFamily,
+            fontSize: 13
+          },
+          itemStyle: {
+            areaColor: "#E5A5A5",
+            borderColor: "#8C6B78",
+            borderWidth: 1.6
+          }
+        },
+        itemStyle: {
+          borderColor: "#B99EA6",
+          borderWidth: 0.8
+        },
+        data: rawData
+      }]
+    };
+  }
+
+  function barOption() {
+    return {
+      backgroundColor: "#FAF2E6",
+      animationDurationUpdate: 900,
+      textStyle: commonText(),
+      title: {
+        text: "各省大闸蟹加工企业数量排序",
+        left: "center",
+        top: "2%",
+        textStyle: {
+          fontFamily: fontFamily,
+          color: "#5b4b56",
+          fontSize: 23,
+          fontWeight: 700
+        }
+      },
+      grid: {
+        left: "19%",
+        right: "11%",
+        top: "10%",
+        bottom: "7%",
+        containLabel: true
+      },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "shadow"
+        },
+        confine: true,
+        backgroundColor: "rgba(255,250,246,.98)",
+        borderColor: "#d7b7b2",
+        borderWidth: 1,
+        padding: [10, 13],
+        textStyle: {
+          fontFamily: fontFamily,
+          color: "#514950",
+          fontSize: 14
+        },
+        formatter: function (params) {
+          const item = params[0];
+          return tooltipText(item.name, item.value);
+        }
+      },
+      xAxis: {
+        type: "value",
+        min: 0,
+        max: maxValue,
+        name: "企业数量（家）",
+        nameLocation: "middle",
+        nameGap: 30,
+        nameTextStyle: {
+          fontFamily: fontFamily,
+          color: "#7a6b73",
+          fontSize: 13
+        },
+        axisLine: {
+          lineStyle: { color: "#C8B4B5" }
+        },
+        axisLabel: {
+          fontFamily: fontFamily,
+          color: "#776a70"
+        },
+        splitLine: {
+          lineStyle: { color: "#E9D9D4" }
+        }
+      },
+      yAxis: {
+        type: "category",
+        inverse: false,
+        data: sorted.map(function (item) { return item.name; }),
+        axisLine: {
+          lineStyle: { color: "#C8B4B5" }
+        },
+        axisTick: { show: false },
+        axisLabel: {
+          fontFamily: fontFamily,
+          color: "#5e535a",
+          fontSize: 13
+        }
+      },
+      series: [{
+        id: "provinceData",
+        type: "bar",
+        data: sorted.map(function (item, index) {
+          return {
+            name: item.name,
+            value: item.value,
+            itemStyle: {
+              color: barColor(index),
+              borderRadius: [0, 5, 5, 0]
+            }
+          };
+        }),
+        barMaxWidth: 18,
+        universalTransition: true,
+        animationDurationUpdate: 900,
+        label: {
+          show: true,
+          position: "right",
+          distance: 7,
+          color: "#6b5b64",
+          fontFamily: fontFamily,
+          fontSize: 12,
+          formatter: function (params) {
+            return formatNumber(params.value);
+          }
+        }
+      }]
+    };
+  }
+
+  function showMap() {
+    chart.setOption(mapOption(), true);
+    currentView = "map";
+  }
+
+  function showBar() {
+    chart.setOption(barOption(), true);
+    currentView = "bar";
+  }
+
+  fetch("./assets/chart11-china-map/china-provinces.json")
+    .then(function (response) {
+      if (!response.ok) throw new Error("地图数据加载失败：" + response.status);
+      return response.json();
+    })
+    .then(function (geoJson) {
+      echarts.registerMap("china-processing", geoJson);
+
+      function restartTimer() {
+        window.clearInterval(timer);
+        timer = window.setInterval(function () {
+          if (currentView === "map") showBar();
+          else showMap();
+        }, 5000);
+      }
+
+      chart.on("click", function (params) {
+        if (currentView === "map" && params.componentType === "series") {
+          showBar();
+          restartTimer();
+        }
+      });
+      chart.on("mouseover", function () {
+        window.clearInterval(timer);
+      });
+      chart.on("mouseout", restartTimer);
+
+      showMap();
+      restartTimer();
+    })
+    .catch(function (error) {
+      document.getElementById("chart").innerHTML =
+        '<div style="padding:80px;text-align:center;color:#8a6c76;font-family:' + fontFamily + ';">' +
+        error.message + "</div>";
+      console.error(error);
+    });
+
+  window.addEventListener("resize", function () {
+    chart.resize();
+  });
+})();
