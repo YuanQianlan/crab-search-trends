@@ -68,6 +68,17 @@
     "宁夏回族自治区": [106.278179, 38.46637]
   };
 
+  function projectLonLat(coord) {
+    const radius = 6378137;
+    const maxLatitude = 85.0511287798066;
+    const longitude = Number(coord[0]) * Math.PI / 180;
+    const latitude = Math.max(-maxLatitude, Math.min(maxLatitude, Number(coord[1]))) * Math.PI / 180;
+    return [
+      radius * longitude,
+      radius * Math.log(Math.tan(Math.PI / 4 + latitude / 2))
+    ];
+  }
+
   const rawData = Object.keys(counts).map(function (name) {
     return { name: name, value: counts[name] };
   });
@@ -387,7 +398,9 @@
         .map(function (feature) {
           const props = feature.properties || {};
           const name = props.name;
-          const coord = provinceCenters[name] || props.centroid || props.center;
+          const coord = provinceCenters[name]
+            ? projectLonLat(provinceCenters[name])
+            : props.centroid || props.center;
           const value = counts[name] || 0;
           if (!coord || !value) return null;
           return {

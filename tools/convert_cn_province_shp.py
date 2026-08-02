@@ -1,4 +1,5 @@
 import json
+import math
 import struct
 from pathlib import Path
 
@@ -6,6 +7,24 @@ from pathlib import Path
 SOURCE_DIR = Path(r"D:\Desktop\竞赛\易智瑞\date\中国_省\中国_省")
 SOURCE_BASE = SOURCE_DIR / "中国_省-MULTIPOLYGON"
 OUTPUT = Path(r"D:\aaaaaaaaa\ArcGIS pro\github-pages-crab-search-trends\assets\chart11-china-map\china-provinces.json")
+WEB_MERCATOR_RADIUS = 6378137.0
+WEB_MERCATOR_MAX_LAT = 85.0511287798066
+
+
+def project_to_web_mercator(point):
+    """Convert the source CGCS2000 geographic coordinates to EPSG:3857."""
+    longitude, latitude = point
+    latitude = max(-WEB_MERCATOR_MAX_LAT, min(WEB_MERCATOR_MAX_LAT, latitude))
+    longitude_radians = math.radians(longitude)
+    latitude_radians = math.radians(latitude)
+    return [
+        round(WEB_MERCATOR_RADIUS * longitude_radians, 3),
+        round(
+            WEB_MERCATOR_RADIUS
+            * math.log(math.tan(math.pi / 4 + latitude_radians / 2)),
+            3,
+        ),
+    ]
 
 
 def read_names():
@@ -58,7 +77,8 @@ def read_shapes():
                 if ring and ring[0] != ring[-1]:
                     ring.append(ring[0])
                 if ring:
-                    rings.append([ring])
+                    projected_ring = [project_to_web_mercator(point) for point in ring]
+                    rings.append([projected_ring])
             all_points = [point for polygon in rings for ring in polygon for point in ring]
             min_x = min(point[0] for point in all_points)
             max_x = max(point[0] for point in all_points)
@@ -78,7 +98,7 @@ def read_shapes():
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 geojson = {
     "type": "FeatureCollection",
-    "name": "中国省级边界_用户提供_CGCS2000经纬度",
+    "name": "中国省级边界_用户提供_WGS84WebMercator",
     "features": read_shapes(),
 }
 OUTPUT.write_text(json.dumps(geojson, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
