@@ -51,6 +51,7 @@
   const maxValue = Math.max.apply(null, rawData.map(function (item) { return item.value; }));
   let currentView = "map";
   let timer = null;
+  let provincePoints = [];
 
   function formatNumber(value) {
     return new Intl.NumberFormat("en-US").format(Number(value) || 0);
@@ -60,6 +61,17 @@
     if (!sorted.length) return palette[0];
     const ratio = index / Math.max(sorted.length - 1, 1);
     return palette[Math.min(palette.length - 1, Math.floor(ratio * palette.length))];
+  }
+
+  function bubbleColor(value) {
+    const ratio = value / Math.max(maxValue, 1);
+    const index = Math.min(palette.length - 1, Math.floor(ratio * (palette.length - 1)));
+    return palette[index];
+  }
+
+  function bubbleSize(value) {
+    if (!value) return 0;
+    return Math.max(12, Math.min(64, 9 + Math.sqrt(value) * 2.65));
   }
 
   function tooltipText(name, value) {
@@ -83,6 +95,8 @@
         type: "continuous",
         min: 0,
         max: maxValue,
+        dimension: 2,
+        seriesIndex: 1,
         left: "4%",
         bottom: "8%",
         itemWidth: 18,
@@ -118,16 +132,12 @@
           return tooltipText(params.name, Number(params.value) || 0);
         }
       },
-      series: [{
-        id: "provinceData",
-        name: "加工企业数量",
-        type: "map",
+      geo: {
         map: "china-processing",
         roam: true,
         zoom: 1.05,
         layoutCenter: ["52%", "48%"],
         layoutSize: "88%",
-        selectedMode: "single",
         emphasis: {
           label: {
             show: true,
@@ -142,11 +152,80 @@
           }
         },
         itemStyle: {
+          areaColor: "#F7E7E1",
           borderColor: "#B99EA6",
           borderWidth: 0.8
+        }
+      },
+      series: [
+        {
+          id: "chinaBase",
+          name: "中国省级底图",
+          type: "map",
+          map: "china-processing",
+          geoIndex: 0,
+          roam: true,
+          itemStyle: {
+            areaColor: "#F7E7E1",
+            borderColor: "#C9AEB5",
+            borderWidth: 0.8
+          },
+          emphasis: {
+            disabled: true
+          },
+          data: rawData
         },
-        data: rawData
-      }]
+        {
+          id: "provinceData",
+          name: "加工企业数量",
+          type: "scatter",
+          coordinateSystem: "geo",
+          symbol: "circle",
+          symbolSize: function (value) {
+            return bubbleSize(value[2]);
+          },
+          data: provincePoints,
+          universalTransition: true,
+          itemStyle: {
+            color: function (params) {
+              return bubbleColor(params.value[2]);
+            },
+            borderColor: "rgba(255,250,246,.92)",
+            borderWidth: 2,
+            shadowColor: "rgba(132,91,113,.22)",
+            shadowBlur: 12,
+            opacity: 0.88
+          },
+          label: {
+            show: true,
+            formatter: function (params) {
+              return params.value[2] >= 10 ? params.name : "";
+            },
+            position: "right",
+            distance: 4,
+            color: "#66555f",
+            fontFamily: fontFamily,
+            fontSize: 12
+          },
+          emphasis: {
+            scale: true,
+            itemStyle: {
+              borderColor: "#7F6475",
+              borderWidth: 2.5,
+              shadowBlur: 16
+            },
+            label: {
+              show: true,
+              fontWeight: 700
+            }
+          },
+          tooltip: {
+            formatter: function (params) {
+              return tooltipText(params.name, Number(params.value[2]) || 0);
+            }
+          }
+        },
+      ]
     };
   }
 
@@ -278,6 +357,19 @@
     })
     .then(function (geoJson) {
       echarts.registerMap("china-processing", geoJson);
+      provincePoints = geoJson.features
+        .map(function (feature) {
+          const props = feature.properties || {};
+          const name = props.name;
+          const coord = props.centroid || props.center;
+          const value = counts[name] || 0;
+          if (!coord || !value) return null;
+          return {
+            name: name,
+            value: [coord[0], coord[1], value]
+          };
+        })
+        .filter(Boolean);
 
       function restartTimer() {
         window.clearInterval(timer);
