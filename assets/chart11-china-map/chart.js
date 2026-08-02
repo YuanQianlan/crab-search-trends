@@ -4,7 +4,7 @@
   const fontFamily = '"Times New Roman","SimSun","宋体",serif';
   const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
   const total = 511;
-  const palette = ["#F6E6E1", "#F7D2C4", "#F2B8A8", "#E9A1A1", "#D8899C", "#B77C9A"];
+  const palette = ["#F2B1A7", "#EE9AA6", "#D8869D", "#C87596", "#B4678D", "#934B78"];
   const counts = {
     "北京市": 1,
     "天津市": 0,
@@ -40,6 +40,32 @@
     "台湾省": 0,
     "香港特别行政区": 0,
     "澳门特别行政区": 0
+  };
+  const provinceCenters = {
+    "北京市": [116.405285, 39.904989],
+    "山西省": [112.549248, 37.857014],
+    "辽宁省": [123.429096, 41.796767],
+    "吉林省": [125.3245, 43.886841],
+    "黑龙江省": [126.642464, 45.756967],
+    "上海市": [121.472644, 31.231706],
+    "江苏省": [118.767413, 32.041544],
+    "浙江省": [120.153576, 30.287459],
+    "安徽省": [117.283042, 31.86119],
+    "福建省": [119.306239, 26.075302],
+    "江西省": [115.892151, 28.676493],
+    "山东省": [117.000923, 36.675807],
+    "河南省": [113.665412, 34.757975],
+    "湖北省": [114.298572, 30.584355],
+    "湖南省": [112.982279, 28.19409],
+    "广东省": [113.280637, 23.125178],
+    "广西壮族自治区": [108.320004, 22.82402],
+    "海南省": [110.33119, 20.031971],
+    "重庆市": [106.504962, 29.533155],
+    "四川省": [104.065735, 30.659462],
+    "贵州省": [106.713478, 26.578343],
+    "云南省": [102.712251, 25.040609],
+    "甘肃省": [103.823557, 36.058039],
+    "宁夏回族自治区": [106.278179, 38.46637]
   };
 
   const rawData = Object.keys(counts).map(function (name) {
@@ -194,7 +220,7 @@
             borderWidth: 2,
             shadowColor: "rgba(132,91,113,.22)",
             shadowBlur: 12,
-            opacity: 0.88
+            opacity: 1
           },
           label: {
             show: true,
@@ -361,7 +387,7 @@
         .map(function (feature) {
           const props = feature.properties || {};
           const name = props.name;
-          const coord = props.centroid || props.center;
+          const coord = provinceCenters[name] || props.centroid || props.center;
           const value = counts[name] || 0;
           if (!coord || !value) return null;
           return {
